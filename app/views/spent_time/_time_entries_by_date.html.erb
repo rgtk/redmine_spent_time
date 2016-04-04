@@ -1,7 +1,10 @@
 <% is_weekend = (day.wday == 0 || day.wday == 6) %>
-<tr id='"time_entry.#{day}"' class="odd <%= (is_weekend ? 'weekend_row' : '')%>">
+<% is_holiday = holiday?(day) %>
+<tr id='"time_entry.#{day}"' class="odd<%= ' weekend_row' if is_weekend %><%= ' holiday_row' if is_holiday %>">
   <td class="centered"><strong><%= day == Date.today ? l(:label_today).titleize : format_date(day) %></strong></td>
-  <% if is_weekend %>
+  <% if is_holiday %>
+    <td colspan="2" class="centered"><%= l(:label_holiday) %> </td>
+  <% elsif is_weekend %>
     <td colspan="2" class="centered"><%= l(:weekend) %> </td>
   <% else %>
     <td colspan="2"></td>

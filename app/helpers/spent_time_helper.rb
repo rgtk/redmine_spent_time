@@ -38,12 +38,12 @@ module SpentTimeHelper
       ordered_collection.concat(collection.sort { |a, b| a <=> b })
       ordered_collection
   end
-  
+
   # Render select project as tree
-  def render_project_tree    
+  def render_project_tree
       select_tag('project_id', "<option value='-1'>-#{l(:select_project_option)}</option>".html_safe +
                            project_tree_options_for_select(user_projects_ordered),
-                           {:onchange => "$.post('#{spent_time_update_project_issues_path(:from => @from, :to => @to)}', {'_method':'post', 'project_id':this.value});".html_safe})    
+                           {:onchange => "$.post('#{spent_time_update_project_issues_path(:from => @from, :to => @to)}', {'_method':'post', 'project_id':this.value});".html_safe})
   end
 
   # Returns the users' projects ordered by name
@@ -86,7 +86,7 @@ module SpentTimeHelper
             :order => "#{TimeEntry.table_name}.spent_on DESC, #{Project.table_name}.name ASC, #{Tracker.table_name}.position ASC, #{Issue.table_name}.id ASC")
     @entries_by_date = @entries.group_by(&:spent_on)
     @total_estimated_time = 0
-    @entries.group_by(&:issue).each_key {|issue| 
+    @entries.group_by(&:issue).each_key {|issue|
         if issue
             @total_estimated_time += (issue.estimated_hours ? issue.estimated_hours.to_f : 0)
         end
@@ -114,7 +114,7 @@ module SpentTimeHelper
         @to = @from + 6
       when 'last_2_weeks'
         @from = Date.today - 14 - (Date.today.cwday - 1)%7
-        @to = @from + 13      
+        @to = @from + 13
       when '7_days'
         @from = Date.today - 7
         @to = Date.today
@@ -163,5 +163,16 @@ module SpentTimeHelper
                         [l(:label_last_n_days, 30), '30_days'],
                         [l(:label_this_year), 'current_year']],
                        value)
+  end
+
+  def holiday?(date)
+    return if @holidays_region == false
+    return Holidays.on(date, @holidays_region).any? unless @holidays_region.nil?
+
+
+    s = Setting.plugin_redmine_spent_time[:holidays_region]
+    @holidays_region = defined?(Holidays) && s.present? ? s.to_sym : false
+
+    holiday?(date)
   end
 end

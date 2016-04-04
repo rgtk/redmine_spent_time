@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : spent_time
     Created on : Nov 13, 2009, 9:14:08 AM
     Author     : eduardo.yanez
@@ -32,7 +32,7 @@ td.more_than_8_hours {
     font-size: 0.9em;
 }
 
-.weekend_row {
+.weekend_row, .holiday_row {
     background-color: #ffdfe6;
 }
 
@@ -48,14 +48,14 @@ input#time_entry_comments {
     text-align: center;
 }
 
-.subject { 
+.subject {
     text-align: left;
-    white-space: pre-wrap; 
+    white-space: pre-wrap;
     wordwrap: break-word;
 }
 
-.comments { 
+.comments {
     text-align: left;
-    white-space: pre-wrap; 
+    white-space: pre-wrap;
     wordwrap: break-word;
 }

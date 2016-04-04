@@ -1,0 +1,6 @@
+<p>
+  <label><%= l(:label_holidays_region) %></label>
+  <%= select_tag('settings[holidays_region]',options_for_select([''] + Holidays.available,
+      @settings[:holidays_region]), disabled: !defined?(Holidays)) %>
+  <em class="info"><%= l(:text_holidays_region) %></em>
+</p>
