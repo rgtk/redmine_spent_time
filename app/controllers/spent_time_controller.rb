@@ -26,6 +26,8 @@ class SpentTimeController < ApplicationController
     else
       @users = [@user]
     end
+    @users = @users.select { |u| u.allowed_to_globally?(:log_time, {}) }
+
     params[:period] ||= '7_days'
     make_time_entry_report(nil, nil, User.current)
     @assigned_issues = []
@@ -68,7 +70,7 @@ class SpentTimeController < ApplicationController
   rescue ::ActionController::RedirectBackError
     redirect_to :action => 'index'
   end
-  
+
   # Create a new time entry
   def create_entry
     @user = User.current
@@ -149,8 +151,8 @@ class SpentTimeController < ApplicationController
   end
 
   private
-  
-  def is_numeric?(obj) 
+
+  def is_numeric?(obj)
    obj.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 
