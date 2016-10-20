@@ -1,4 +1,4 @@
-# -*- encoding : iso-8859-1 -*-
+# encoding: utf-8
 require 'redmine'
 
 Redmine::Plugin.register :redmine_spent_time do
