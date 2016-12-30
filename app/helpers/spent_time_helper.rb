@@ -13,15 +13,15 @@ module SpentTimeHelper
     else
       conditions = []
       conditions << "(#{Issue.table_name}.assigned_to_id=:user_id or #{TimeEntry.table_name}.user_id=:user_id)"
-      conditions << "#{IssueStatus.table_name}.is_closed=false"
       conditions << "#{Project.table_name}.status=#{Project::STATUS_ACTIVE}"
       conditions << "#{Project.table_name}.id=:project_id"
       arguments = {:user_id => @user.id, :project_id => @project.id}
       @assigned_issues = Issue.joins(:status, :project, :tracker, :priority)
                               .joins('LEFT JOIN time_entries ON time_entries.issue_id = issues.id')
-                             .where(conditions.join(' AND '), arguments)
-                              .distinct
-                             .order("#{Issue.table_name}.id DESC, #{Issue.table_name}.updated_on DESC")
+                              .order("#{Issue.table_name}.id DESC, #{Issue.table_name}.updated_on DESC")
+                              .where(issue_statuses: { is_closed: false })
+                              .where(conditions.join(' AND '), arguments)
+                              .uniq
     end
     @assigned_issues
   end

@@ -22,7 +22,6 @@ class SpentTimeController < ApplicationController
       projects = User.current.projects
       projects.each { |project| @users.concat(project.users) }
       @users.uniq!
-      @users.order(:firstname)
     else
       @users = [@user]
     end
